@@ -1,5 +1,4 @@
 <h1 align="center"> ApiSample </h1>
-https://img.shields.io/badge/Em%20desenvolvimento-maker?style=for-the-badge&color=blue
 
 
 # Objetivo
