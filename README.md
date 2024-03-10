@@ -48,3 +48,10 @@ De dentro da pasta de infraestrutura vamos executar os comandos
 `dotnet add package Microsoft.EntityFrameworkCore.Tools`
 
 `dotnet add package Microsoft.EntityFrameworkCore.SqlServer`
+
+
+# Criando container com RabbitMQ
+
+docker run -d --name my-rabbit -p 15672:15672 -p 5672:5672 rabbitmq:3-management
+Vale a pena lembrar que o login é guest e senha guest
+E, nesse caso, o endereço de acesso será: http://localhost:15672

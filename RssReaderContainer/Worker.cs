@@ -1,6 +1,6 @@
 using RssReader;
-using System.Formats.Asn1;
-using System;
+using RabbitMQManager;
+using System.Text.Json;
 
 namespace RssReaderContainer
 {
@@ -8,16 +8,22 @@ namespace RssReaderContainer
     {
         private readonly ILogger<Worker> _logger;
         private Reader _reader;
-
         IList<Feed> _list;
+
+        static Manager _queueManager;
+        string fanoutName = "fanoutFeed";   
+        string queueName = "omnycontent";
 
         public Worker(ILogger<Worker> logger)
         {
             _logger = logger;
-
+            _queueManager = new Manager("guest","guest");
             _reader = new Reader();
-
             _list = _reader.Parse("https://www.omnycontent.com/d/playlist/42233656-1562-49af-98d5-acd100df7932/a3504d75-e95a-41c5-8dda-aced013a0cb9/343561ea-888c-4641-bd55-aced013a0cd5/podcast.rss");
+        
+            _queueManager.CreateExchangeFanout(fanoutName, true, _queueManager.Connection);
+            _queueManager.CreateQueue(queueName, _queueManager.Connection);
+            _queueManager.BindingQueue(queueName, fanoutName, _queueManager.Connection, null);        
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -25,14 +31,16 @@ namespace RssReaderContainer
             while (!stoppingToken.IsCancellationRequested)
             {
                 // ENFILEIRAR OBJETOS NO RABBITMQ        
+                JsonSerializerOptions jsonOptions = new JsonSerializerOptions {WriteIndented = true};
+                
                 foreach (var feed in _list)
                 {
-                    _logger.LogInformation($"Titulo {feed.Title}", feed.Title);
-                    _logger.LogInformation($"Conteudo {feed.Content}", feed.Content);
-                    _logger.LogInformation($"Data de publicao {feed.PublishDate}", feed.PublishDate);
+                    string feedJson = JsonSerializer.Serialize(feed, jsonOptions);
+                    //_logger.LogInformation($"Feed: {feedJson}");
+                    _queueManager.Enqueue(feedJson, _queueManager.Connection, fanoutName);
                 }
 
-                _logger.LogInformation("A ista possui: {time} itens.", _list.Count());
+               // _logger.LogInformation("A ista possui: {time} itens.", _list.Count());
                 await Task.Delay(1000, stoppingToken);
             }
         }

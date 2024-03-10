@@ -15,5 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RssReader\RssReader.csproj" />
+    <ProjectReference Include="..\RabbitMQManager\RabbitMQManager.csproj" />
   </ItemGroup>
 </Project>
