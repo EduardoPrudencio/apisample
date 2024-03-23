@@ -10,7 +10,7 @@ namespace RssReaderContainer
         private Reader _reader;
         IList<Feed> _list;
 
-        static Manager _queueManager;
+        static Manager? _queueManager;
         string fanoutName = "fanoutFeed";   
         string queueName = "omnycontent";
         string[] feedIds;
@@ -32,8 +32,7 @@ namespace RssReaderContainer
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
-            {
-                // ENFILEIRAR OBJETOS NO RABBITMQ        
+            {      
                 JsonSerializerOptions jsonOptions = new JsonSerializerOptions {WriteIndented = true};
                 
                 int count = 0;
@@ -44,7 +43,7 @@ namespace RssReaderContainer
                     //_logger.LogInformation($"Feed: {feedJson}");
 
                     if (feed.Id != null && (Array.IndexOf(feedIds, feed.Id) < 0))
-                    {   _queueManager.Enqueue(feedJson, _queueManager.Connection, fanoutName); 
+                    {   _queueManager?.Enqueue(feedJson, _queueManager.Connection, fanoutName); 
                         feedIds[count] = feed.Id;
                         count++;                     
                     }
