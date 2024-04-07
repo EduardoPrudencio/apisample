@@ -1,6 +1,7 @@
 using RssReader;
 using RabbitMQManager;
 using System.Text.Json;
+using RssReaderContainer.Loggin;
 
 namespace RssReaderContainer
 {
@@ -40,7 +41,7 @@ namespace RssReaderContainer
                 foreach (var feed in _list)
                 {
                     string feedJson = JsonSerializer.Serialize(feed, jsonOptions);
-                    //_logger.LogInformation($"Feed: {feedJson}");
+                    _logger.LogInformation($"Feed: {feedJson}");
 
                     if (feed.Id != null && (Array.IndexOf(feedIds, feed.Id) < 0))
                     {   _queueManager?.Enqueue(feedJson, _queueManager.Connection, fanoutName); 
@@ -49,7 +50,7 @@ namespace RssReaderContainer
                     }
                 }
 
-               // _logger.LogInformation("A ista possui: {time} itens.", _list.Count());
+               _logger.LogInformation("A ista possui: {time} itens.", _list.Count());
                await Task.Delay(3600000, stoppingToken);
             }
         }
