@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiSample.Domain", "ApiSamp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiSample.Infrastructure", "ApiSample.Infrastructure\ApiSample.Infrastructure.csproj", "{F56BCF3A-1901-41AF-9850-65FE62AFD41D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RssReader", "RssReader\RssReader.csproj", "{7478D920-7DDF-4271-AE59-8FE8FDEF97A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RssReader", "RssReader\RssReader.csproj", "{7478D920-7DDF-4271-AE59-8FE8FDEF97A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RssReaderContainer", "RssReaderContainer\RssReaderContainer.csproj", "{93D118CA-7896-48E1-B200-D1312C2FF322}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RssReaderContainer", "RssReaderContainer\RssReaderContainer.csproj", "{93D118CA-7896-48E1-B200-D1312C2FF322}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitMQManager", "RabbitMQManager\RabbitMQManager.csproj", "{3C4FE3E3-1203-4713-996F-8DDD3355701F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{93D118CA-7896-48E1-B200-D1312C2FF322}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93D118CA-7896-48E1-B200-D1312C2FF322}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93D118CA-7896-48E1-B200-D1312C2FF322}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C4FE3E3-1203-4713-996F-8DDD3355701F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C4FE3E3-1203-4713-996F-8DDD3355701F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C4FE3E3-1203-4713-996F-8DDD3355701F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C4FE3E3-1203-4713-996F-8DDD3355701F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

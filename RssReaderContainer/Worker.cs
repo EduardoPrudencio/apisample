@@ -1,7 +1,6 @@
 using RssReader;
 using RabbitMQManager;
 using System.Text.Json;
-using RssReaderContainer.Loggin;
 
 namespace RssReaderContainer
 {
