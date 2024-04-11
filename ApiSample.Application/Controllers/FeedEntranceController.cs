@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using System;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ApiSample.Applicattion.Controllers;
 
@@ -12,16 +10,22 @@ namespace ApiSample.Applicattion.Controllers;
 public class FeedEntranceController : ControllerBase
 {
     private readonly ConnectionFactory _connectionFactory;
+   // IConnection connection;
     private readonly string _queueName;
     private readonly string _exchangeName;
     private readonly string _routingKey;
 
-    public FeedEntranceController(ConnectionFactory connectionFactory)
+    public FeedEntranceController()
     {
-        _connectionFactory = connectionFactory;
-        _queueName = "your_queue_name";
-        _exchangeName = "your_exchange_name";
-        _routingKey = "your_routing_key";
+        _queueName = "omnycontent";
+        _exchangeName = "fanoutFeed";
+        _routingKey = "";
+
+        _connectionFactory = new ConnectionFactory();
+        _connectionFactory.HostName = "localhost";
+        _connectionFactory.UserName = "guest";
+        _connectionFactory.Password = "guest";
+       // _connectionFactory.CreateConnection();
     }
 
     [HttpPost("startListening")]
@@ -29,23 +33,39 @@ public class FeedEntranceController : ControllerBase
     {
         try
         {
+            EventingBasicConsumer consumer;
+            
             using (var connection = _connectionFactory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
-                channel.QueueDeclare(queue: _queueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
-                channel.ExchangeDeclare(exchange: _exchangeName, type: ExchangeType.Direct);
+                channel.QueueDeclare(queue: _queueName,
+                                     durable: true,
+                                     exclusive: false,
+                                     autoDelete: false,
+                                    arguments: null);
 
-                channel.QueueBind(queue: _queueName, exchange: _exchangeName, routingKey: _routingKey);
+                channel.QueueDeclare(queue: _queueName,
+                                    durable: true,
+                                    exclusive: false,
+                                    autoDelete: false,
+                                    arguments: null);
 
-                var consumer = new AsyncEventingBasicConsumer(channel);
-                consumer.Received += async (model, ea) =>
-                {
-                    var body = ea.Body.ToArray();
-                    var message = Encoding.UTF8.GetString(body);
-                    Console.WriteLine("Mensagem recebida: {0}", message);
-                };
+               consumer = new EventingBasicConsumer(channel);
 
-                await Task.Run(() => channel.BasicConsume(queue: _queueName, autoAck: true, consumer: consumer));
+               consumer.Received += (model, ea) =>
+               {
+                  var body = ea.Body.ToArray();
+                  var message = Encoding.UTF8.GetString(body);
+                  Console.WriteLine(" [x] Received {0}", message);
+                  channel.BasicNack(ea.DeliveryTag, false, false);
+               };
+
+               channel.BasicQos(0, 1, false);
+
+               channel.BasicConsume(queue: _queueName,
+                                    autoAck: false,
+                                    consumer: consumer);
+           
 
                 return Ok("Listening started.");
             }
