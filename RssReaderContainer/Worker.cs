@@ -57,7 +57,7 @@ namespace RssReaderContainer
                 }
                 catch (Exception exp)
                 {
-                    throw;
+                    _logger.LogError($"Erro: {exp.Message} - {exp.StackTrace}");
                 }
             }
         }

@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ApiSample.Domain\ApiSample.Domain.csproj" />
     <ProjectReference Include="..\RssReader\RssReader.csproj" />
     <ProjectReference Include="..\RabbitMQManager\RabbitMQManager.csproj" />
   </ItemGroup>

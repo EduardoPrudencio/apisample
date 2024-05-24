@@ -2,16 +2,20 @@ using RabbitMQManager;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
+using System.Text.Json;
+using ApiSample.Domain;
+using ApiSample.Infraestrutura;
 
 namespace RssQueueConsumer
 {
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
-        private IConnection _connection;
-        private IModel _channel;
+        private IConnection? _connection;
+        private IModel? _channel;
         private Manager _queueManager;
-        private EventingBasicConsumer _consumer;
+        private EventingBasicConsumer? _consumer;
+        private ImageDownloader _imageDownloader;
 
         private const string QueueName = "omnycontent";
 
@@ -19,6 +23,7 @@ namespace RssQueueConsumer
         {
             _logger = logger;
             _queueManager = new Manager("guest", "guest", "172.17.208.1");
+            _imageDownloader = new ImageDownloader();
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
@@ -39,6 +44,11 @@ namespace RssQueueConsumer
         {
             var body = e.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
+
+           Feed _feed = JsonSerializer.Deserialize<Feed>(message);
+
+            _ = Task.Run(() => _imageDownloader.SaveImageAsync(_feed.Image, _feed.Id));
+
             _logger.LogInformation(" [x] Received {0}", message);
 
             try
