@@ -122,19 +122,19 @@ Crie um arquivo de serviço systemd. Abra um editor de texto e crie um arquivo c
 
 Adicione o seguinte conteúdo ao arquivo:
 
-`[Unit]`
-`Description=My Worker Service`
+[Unit]
+Description=My Worker Service
 
-`[Service]`
-`ExecStart=/usr/bin/dotnet /caminho/para/seu/projeto/bin/Release/netcoreapp3.1/publish/SeuWorkerService.dll`
-`Restart=always`
-`RestartSec=10`
-`SyslogIdentifier=myworkerservice`
-`User=www-data`
-`Environment=ASPNETCORE_ENVIRONMENT=Production`
+[Service]
+ExecStart=/usr/bin/dotnet /caminho/para/seu/projeto/bin/Release/netcoreapp3.1/publish/SeuWorkerService.dll
+Restart=always
+RestartSec=10
+SyslogIdentifier=myworkerservice
+User=www-data
+Environment=ASPNETCORE_ENVIRONMENT=Production
 
-`[Install]`
-`WantedBy=multi-user.target`
+[Install]
+WantedBy=multi-user.target
 
 Habilitar o Serviço:
 No terminal, habilite e inicie o serviço:
