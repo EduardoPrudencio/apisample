@@ -1,16 +1,33 @@
-version: '3.4'
+version: '3.7'
 
 services:
-  rssreadercontainer:
-    image: rssreadercontainer
-    build:
-      context: .
-      dockerfile: RssReaderContainer/Dockerfile
-
   my-rabbit:
     image: rabbitmq:3-management
     ports:
       - "15672:15672"
       - "5672:5672"
     container_name: my-rabbit
-    restart: always  # Isso faz com que o contêiner do RabbitMQ reinicie sempre que ele falhar ou for desligado
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "rabbitmqctl status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  rssreadercontainer:
+    image: rssreadercontainer
+    build:
+      context: .
+      dockerfile: RssReaderContainer/Dockerfile
+    depends_on:
+      my-rabbit:
+        condition: service_healthy
+
+  rssqueueconsumer:
+    image: rssqueueconsumer
+    build:
+      context: .
+      dockerfile: RssQueueConsumer/Dockerfile
+    depends_on:
+      my-rabbit:
+        condition: service_healthy
