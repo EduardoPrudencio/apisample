@@ -6,7 +6,20 @@
 
 
 # Objetivo
-Este projeto tem como finalidade criar exemplos para documentar comandos e trechos de código que possam servir para consulta futura.
+
+Este é um projeto de exemplo que poderá servir como referência para consultas futuras. O objetivo principal é demonstrar como acessar um fornecedor de feed, baixar cada feed publicado e enfileirá-los utilizando o RabbitMQ para gerenciar as filas de mensagens.
+
+O projeto inclui diversos componentes:
+
+Coletor de Feeds: Um worker service que acessa o fornecedor de feed, baixa os conteúdos publicados e os enfileira no RabbitMQ. Este componente é responsável por garantir que todos os feeds sejam capturados e enviados para processamento de maneira eficiente e confiável.
+
+Processador de Feeds: Outro worker service que consome os feeds da fila no RabbitMQ, processa cada item e finaliza o processo com a persistência dos dados em um banco de dados. Este componente assegura que todos os feeds coletados sejam processados corretamente e armazenados para uso posterior.
+
+API de Feeds: Uma API desenvolvida em .NET que expõe os dados dos feeds processados. Esta API permite que outros sistemas acessem os dados dos feeds de maneira estruturada e segura.
+
+Frontend em React: Um projeto frontend desenvolvido em React que consome a API de Feeds e exibe os conteúdos coletados de maneira amigável e intuitiva. Este componente fornece uma interface visual para os usuários interagirem com os dados dos feeds.
+
+O fluxo completo do projeto é: o coletor de feeds baixa e enfileira os feeds, o processador de feeds consome e processa esses itens, a API de Feeds disponibiliza os dados e o frontend em React exibe as informações para os usuários. Este projeto é um exemplo abrangente que integra várias tecnologias e práticas recomendadas para o desenvolvimento de software moderno, desde o backend até o frontend.
 
 # Sobre o projeto
 A ideia deste projeto é ter um worker que varre uma lista de endereços de RSS, baixa seu conteúdo e o enfileira para ser processado por outro componente.
