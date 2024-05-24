@@ -1,5 +1,9 @@
 <h1 align="center"> ApiSample </h1>
 
+<p align="center">
+<img loading="lazy" src="http://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=GREEN&style=for-the-badge"/>
+</p>
+
 
 # Objetivo
 Este projeto tem como finalidade criar exemplos para documentar comandos e trechos de código que possam servir para consulta futura.
