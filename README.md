@@ -5,7 +5,7 @@
 Este projeto tem como finalidade criar exemplos para documentar comandos e techos de código para que possam servir para consulta futuramente.  
 
 # Sobre o projeto
-A ideia para esse projeto é termos uma api que vai varrer uma lista de endereços de RSS, baixar o seu conteúdo e enfileirar para que o mesmo possa ser processado em outro momento. 
+A ideia para esse projeto é termos um worker que vai varrer uma lista de endereços de RSS, baixar o seu conteúdo e enfileirar para que o mesmo possa ser processado por outro componente. 
 
 # Tecnologias usadas
 
