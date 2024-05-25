@@ -4,6 +4,8 @@ namespace ApiSample.Infraestrutura
 {
     public class ImageDownloader
     {
+        public ImageDownloader(){}
+
         public async Task SaveImageAsync(string url, string name)
         {
             string extensionImage = url.Split('.').Last();
@@ -28,7 +30,6 @@ namespace ApiSample.Infraestrutura
                     }
                 }
             });
-
         }
     }
 }
