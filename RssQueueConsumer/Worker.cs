@@ -1,3 +1,5 @@
+using System;
+using MongoDB.Driver;
 using RabbitMQManager;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -17,17 +19,24 @@ namespace RssQueueConsumer
         private EventingBasicConsumer? _consumer;
         private ImageDownloader _imageDownloader;
 
+        IMongoDatabase database;
+
         private const string QueueName = "omnycontent";
+        private readonly MongoDBIntegrate _mongoDBIntegrate;
+
 
         public Worker(ILogger<Worker> logger)
         {
             _logger = logger;
-            _queueManager = new Manager("guest", "guest", "172.17.208.1");
+            _queueManager = new Manager("guest", "guest", "localhost");
             _imageDownloader = new ImageDownloader();
+            _mongoDBIntegrate = new MongoDBIntegrate("mongodb://localhost:27017", "mudb");
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
+            database = _mongoDBIntegrate.GetDatabaseConnection();
+
             _connection = _queueManager.Connection;
             _channel = _connection.CreateModel();
             _channel.QueueDeclare(queue: QueueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
@@ -47,14 +56,14 @@ namespace RssQueueConsumer
 
            Feed _feed = JsonSerializer.Deserialize<Feed>(message);
 
-            _ = Task.Run(() => _imageDownloader.SaveImageAsync(_feed.Image, _feed.Id));
+            // _ = Task.Run(() => _imageDownloader.SaveImageAsync(_feed.Image, _feed.Id));
 
             _logger.LogInformation(" [x] Received {0}", message);
 
             try
             {
-                // Process the message
-                // TODO: Add your message processing logic here
+                var collection = database.GetCollection<Feed>("feeds");
+                collection.InsertOne(_feed);
 
                 _channel.BasicAck(e.DeliveryTag, false);
             }
