@@ -22,21 +22,20 @@ namespace RssQueueConsumer
         IMongoDatabase database;
 
         private const string QueueName = "omnycontent";
+        private readonly MongoDBIntegrate _mongoDBIntegrate;
+
 
         public Worker(ILogger<Worker> logger)
         {
             _logger = logger;
             _queueManager = new Manager("guest", "guest", "localhost");
             _imageDownloader = new ImageDownloader();
+            _mongoDBIntegrate = new MongoDBIntegrate("mongodb://localhost:27017", "mudb");
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            var connectionString = "mongodb://localhost:27017";
-            var client = new MongoClient(connectionString);
-            // var server = client.GetServer();
-            database = client.GetDatabase("mudb"); // "test2" é o nome da
-
+            database = _mongoDBIntegrate.GetDatabaseConnection();
 
             _connection = _queueManager.Connection;
             _channel = _connection.CreateModel();
@@ -63,9 +62,7 @@ namespace RssQueueConsumer
 
             try
             {
-                // Process the message
-                // TODO: Add your message processing logic here
-                var collection = database.GetCollection<Feed>("feeds"); // podemos pensar nessa como uma tabela
+                var collection = database.GetCollection<Feed>("feeds");
                 collection.InsertOne(_feed);
 
                 _channel.BasicAck(e.DeliveryTag, false);
