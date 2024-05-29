@@ -56,7 +56,14 @@ namespace RssQueueConsumer
 
            Feed _feed = JsonSerializer.Deserialize<Feed>(message);
 
-            // _ = Task.Run(() => _imageDownloader.SaveImageAsync(_feed.Image, _feed.Id));
+            if (_feed.Id.Contains("http"))
+            {
+                string[] parts = _feed.Id.Split("/");
+                _feed.Id = string.IsNullOrEmpty(parts.Last()) ? parts[parts.Count() -2] : parts.Last();
+            }
+
+            Task downloadImage = Task.Run(() => _imageDownloader.SaveImageAsync(_feed.Image, _feed.Id));
+            downloadImage.Wait();
 
             _logger.LogInformation(" [x] Received {0}", message);
 
