@@ -30,9 +30,8 @@ namespace RssQueueConsumer
             _logger = logger;
             _queueManager = new Manager("guest", "guest", "localhost");
             _imageDownloader = new ImageDownloader();
-            _mongoDBIntegrate = new MongoDBIntegrate("mongodb://localhost:27017", "mudb");
+            _mongoDBIntegrate = new MongoDBIntegrate("mongodb://root:123456@localhost:27017", "feeds");
         }
-
         public override Task StartAsync(CancellationToken cancellationToken)
         {
             database = _mongoDBIntegrate.GetDatabaseConnection();
