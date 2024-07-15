@@ -27,6 +27,7 @@ A ideia deste projeto é ter um worker que varre uma lista de endereços de RSS,
 # Tecnologias usadas
 
 * .Net
+* MongoDB
 * Entityframework
 * Worker Service
 * Docker
