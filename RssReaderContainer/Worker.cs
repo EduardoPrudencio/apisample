@@ -18,7 +18,7 @@ namespace RssReaderContainer
         public Worker(ILogger<Worker> logger)
         {
             _logger = logger;
-            _queueManager = new Manager("guest","guest");
+            _queueManager = new Manager("guest","guest", host: "172.18.160.1");
             _reader = new Reader();
             _list = _reader.Parse("https://www.omnycontent.com/d/playlist/42233656-1562-49af-98d5-acd100df7932/a3504d75-e95a-41c5-8dda-aced013a0cb9/343561ea-888c-4641-bd55-aced013a0cd5/podcast.rss");
         

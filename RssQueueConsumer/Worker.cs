@@ -28,7 +28,7 @@ namespace RssQueueConsumer
         public Worker(ILogger<Worker> logger)
         {
             _logger = logger;
-            _queueManager = new Manager("guest", "guest", "localhost");
+            _queueManager = new Manager("guest", "guest", host: "172.18.160.1");
             _imageDownloader = new ImageDownloader();
             _mongoDBIntegrate = new MongoDBIntegrate("mongodb://root:123456@localhost:27017", "mudb");
         }
