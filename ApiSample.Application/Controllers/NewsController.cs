@@ -1,9 +1,8 @@
-﻿using ApiSample.Domain;
+﻿using ApiSample.Application.Model;
+using ApiSample.Domain;
 using ApiSample.Infraestrutura;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace ApiSample.Application.Controllers
 {
@@ -15,6 +14,10 @@ namespace ApiSample.Application.Controllers
         private MongoDBIntegrate _mongoDBIntegrate;
         IMongoCollection<Feed> collection;
 
+        int _feedsPerPage = 20;
+        long _totalFeeds;
+        int _totalPages;
+
         public NewsController()
         {
             _mongoDBIntegrate = new MongoDBIntegrate("mongodb://root:123456@localhost:27017", "mudb");
@@ -22,18 +25,30 @@ namespace ApiSample.Application.Controllers
             collection = database.GetCollection<Feed>("feeds");
         }
 
-        [HttpGet("pagenumber/{pagenumber}/pagesize/{pagesize}")]
-        public async Task<IEnumerable<Feed>> Get(int pagenumber, int pagesize)
+        [HttpGet("pagenumber/{pagenumber}")]
+        public async Task<FeedsResponse> Get(int pagenumber)
         {
             try
             {
+                IFindFluent<Feed, Feed> feedsCollection =  collection.Find(feed => true);
 
-                var feedsList = await collection.Find(feed => true)
-                                                .Skip(pagenumber)
-                                                .Limit(pagesize)
+                _totalFeeds = await feedsCollection.CountAsync();
+                
+                int lastPage = (int)(_totalFeeds % _feedsPerPage) > 0 ? 1 : 0;
+
+                _totalPages = (int)(_totalFeeds / _feedsPerPage) + lastPage;
+
+
+                int feedsToSkip = (pagenumber - 1) * _feedsPerPage;
+
+                var feedsList = await feedsCollection
+                                                .Skip(feedsToSkip)
+                                                .Limit(_feedsPerPage)
                                                 .ToListAsync();
 
-                return feedsList;
+                FeedsResponse _feedResponse = new FeedsResponse(totalFeeds: _totalFeeds, totalPages: _totalPages, feedsPerPages: _feedsPerPage, page: pagenumber, feeds: feedsList);
+
+                return _feedResponse;
             }
             catch (Exception)
             {
