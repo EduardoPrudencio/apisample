@@ -1,4 +1,3 @@
-using System;
 using MongoDB.Driver;
 using RabbitMQManager;
 using RabbitMQ.Client;
@@ -19,16 +18,15 @@ namespace RssQueueConsumer
         private EventingBasicConsumer? _consumer;
         private ImageDownloader _imageDownloader;
 
-        IMongoDatabase database;
+        IMongoDatabase? database;
 
         private const string QueueName = "omnycontent";
         private readonly MongoDBIntegrate _mongoDBIntegrate;
 
-
         public Worker(ILogger<Worker> logger)
         {
             _logger = logger;
-            _queueManager = new Manager("guest", "guest", host: "172.18.160.1");
+            _queueManager = new Manager("guest", "guest", host: "localhost");
             _imageDownloader = new ImageDownloader();
             _mongoDBIntegrate = new MongoDBIntegrate("mongodb://root:123456@localhost:27017", "mudb");
         }
@@ -53,30 +51,33 @@ namespace RssQueueConsumer
             var body = e.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
 
-           Feed _feed = JsonSerializer.Deserialize<Feed>(message);
+            Feed _feed = JsonSerializer.Deserialize<Feed>(message);
 
-            if (_feed.Id.Contains("http"))
+            if (_feed.Id != null)
             {
-                string[] parts = _feed.Id.Split("/");
-                _feed.Id = string.IsNullOrEmpty(parts.Last()) ? parts[parts.Count() -2] : parts.Last();
-            }
+                if (_feed.Id.Contains("http"))
+                {
+                    string[] parts = _feed.Id.Split("/");
+                    _feed.Id = string.IsNullOrEmpty(parts.Last()) ? parts[parts.Count() - 2] : parts.Last();
+                }
 
-            Task downloadImage = Task.Run(() => _imageDownloader.SaveImageAsync(_feed.Image, _feed.Id));
-            downloadImage.Wait();
+                Task downloadImage = Task.Run(() => _imageDownloader.SaveImageAsync(_feed.Image, _feed.Id));
+                downloadImage.Wait();
+            }
 
             _logger.LogInformation(" [x] Received {0}", message);
 
             try
             {
-                var collection = database.GetCollection<Feed>("feeds");
-                collection.InsertOne(_feed);
+                var collection = database?.GetCollection<Feed>("feeds");
+                collection?.InsertOne(_feed);
 
-                _channel.BasicAck(e.DeliveryTag, false);
+                _channel?.BasicAck(e.DeliveryTag, false);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error processing message");
-                _channel.BasicNack(e.DeliveryTag, false, false);
+                _channel?.BasicNack(e.DeliveryTag, false, false);
             }
         }
 
@@ -90,8 +91,8 @@ namespace RssQueueConsumer
 
         public override async Task StopAsync(CancellationToken cancellationToken)
         {
-            _channel.Close();
-            _connection.Close();
+            _channel?.Close();
+            _connection?.Close();
             await base.StopAsync(cancellationToken);
         }
 

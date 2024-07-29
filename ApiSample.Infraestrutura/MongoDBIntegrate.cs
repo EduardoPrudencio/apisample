@@ -5,7 +5,7 @@ namespace ApiSample.Infraestrutura
 {
     public class MongoDBIntegrate
     {
-        IMongoDatabase? database;
+        //IMongoDatabase? database;
 
         public MongoDBIntegrate(string connectionString, string dataBaseName)
         {
@@ -17,7 +17,7 @@ namespace ApiSample.Infraestrutura
         public string DataBaseName { get; set; }
 
         public IMongoDatabase GetDatabaseConnection()
-        { 
+        {
             var client = new MongoClient(ConnectionString);
             return client.GetDatabase("mudb");
         }

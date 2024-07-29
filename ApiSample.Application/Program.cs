@@ -1,13 +1,25 @@
 
+using ApiSample.Application;
+using ApiSample.Domain;
+using MongoDB.Driver;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+builder.Services.AddSingleton<IMongoDBIntegrate>(sp =>
+        new MongoDBIntegrate("mongodb://root:123456@localhost:27017", "mudb"));
+
+builder.Services.AddScoped<IMongoDatabase>(sp =>
+    sp.GetRequiredService<IMongoDBIntegrate>().GetDatabaseConnection());
+
+builder.Services.AddScoped(sp =>
+    sp.GetRequiredService<IMongoDatabase>().GetCollection<Feed>("feeds"));
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 
 var app = builder.Build();
 

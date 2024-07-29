@@ -1,7 +1,7 @@
 ﻿using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using System;
-using System.Collections.Generic;
+// using System;
+// using System.Collections.Generic;
 using System.Text;
 
 namespace RabbitMQManager;
@@ -10,10 +10,10 @@ namespace RabbitMQManager;
     {
 
         IConnection connection;
-        IModel model;
-        EventingBasicConsumer consumer;
+        IModel? model;
+        // EventingBasicConsumer? consumer;
         ConnectionFactory connectionFactory;
-        public event EventHandler<BasicDeliverEventArgs> ReceiveMessage;
+        // public event EventHandler<BasicDeliverEventArgs>? ReceiveMessage;
 
 
         public Manager(string login, string password, string host = "localhost")
@@ -67,7 +67,7 @@ namespace RabbitMQManager;
             }
         }
 
-        public void BindingQueue(string queueName, string exchangeName, IConnection connection, Dictionary<string, object> arguments = null, string routingKey = "")
+        public void BindingQueue(string queueName, string exchangeName, IConnection connection, Dictionary<string, object>? arguments = null , string routingKey = "")
         {
             if (arguments == null) arguments = new Dictionary<string, object>();
 
@@ -77,11 +77,11 @@ namespace RabbitMQManager;
             }
         }
 
-        public void Enqueue(string message, IConnection connection, string exchangeName = "", string routungKey = "", Dictionary<string, object> properties = null)
+        public void Enqueue(string message, IConnection connection, string exchangeName = "", string routungKey = "", Dictionary<string, object>? properties = null)
         {
             using (model = connection.CreateModel())
             {
-                IBasicProperties basicProperties = null;
+                IBasicProperties? basicProperties = null;
 
                 if (properties != null)
                 {

@@ -10,34 +10,34 @@ namespace ApiSample.Application.Controllers
     [ApiController]
     public class NewsController : ControllerBase
     {
-        IMongoDatabase database;
-        private MongoDBIntegrate _mongoDBIntegrate;
-        IMongoCollection<Feed> collection;
+        IMongoDatabase _database;
+        IMongoCollection<Feed> _collection;
 
         int _feedsPerPage = 20;
         long _totalFeeds;
         int _totalPages;
 
-        public NewsController()
+        public NewsController(IMongoDatabase database, IMongoCollection<Feed> collection)
         {
-            _mongoDBIntegrate = new MongoDBIntegrate("mongodb://root:123456@localhost:27017", "mudb");
-            database = _mongoDBIntegrate.GetDatabaseConnection();
-            collection = database.GetCollection<Feed>("feeds");
+            _database = database;
+            _collection = collection;
         }
 
         [HttpGet("pagenumber/{pagenumber}")]
+        [Obsolete]
         public async Task<FeedsResponse> Get(int pagenumber)
         {
+            if (pagenumber < 1) pagenumber = 1;
+
             try
             {
-                IFindFluent<Feed, Feed> feedsCollection =  collection.Find(feed => true);
+                IFindFluent<Feed, Feed> feedsCollection = _collection.Find(feed => true);
 
                 _totalFeeds = await feedsCollection.CountAsync();
-                
+
                 int lastPage = (int)(_totalFeeds % _feedsPerPage) > 0 ? 1 : 0;
 
                 _totalPages = (int)(_totalFeeds / _feedsPerPage) + lastPage;
-
 
                 int feedsToSkip = (pagenumber - 1) * _feedsPerPage;
 
@@ -55,6 +55,5 @@ namespace ApiSample.Application.Controllers
                 throw;
             }
         }
-   
     }
 }
