@@ -2,27 +2,21 @@ using Moq;
 using MongoDB.Driver;
 using ApiSample.Application.Controllers;
 using ApiSample.Domain;
-using System.Diagnostics;
+using ApiSample.Application.Model;
 
 namespace Tests
 {
-    [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
     public class NewsControllerTest
     {
-        //IMongoDatabase mockDatabase;
         NewsController _newsController;
 
         public NewsControllerTest()
         {
-            var mockDatabase = new Mock<IMongoDatabase>();
+            var mockDatabase   = new Mock<IMongoDatabase>();
             var mockCollection = new Mock<IMongoCollection<Feed>>();
+            var mockFindFluenc = new Mock<IFindFluent<Feed, Feed>>();
 
-
-            var feeds = new List<Feed>
-            {
-                new Feed { Id = "1", Title = "Feed 1", Content = "Content 1" },
-                new Feed { Id = "2", Title = "Feed 2", Content = "Content 2" }
-            };
+            var feeds = Configuration.GetFeeds();
 
             mockDatabase
                 .Setup(db => db.GetCollection<Feed>(It.IsAny<string>(), It.IsAny<MongoCollectionSettings>()))
@@ -42,21 +36,21 @@ namespace Tests
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(mockCursor.Object);
 
-
             _newsController = new NewsController(mockDatabase.Object, mockCollection.Object);
         }
 
-
         [Fact]
-        public void Test1()
+        public void MustReturnFourPages()
         {
-            var teste = _newsController.Get(2);
-            Assert.True(false);
+            FeedsResponse response = _newsController.Get(1).Result;
+            Assert.True(response.TotalPages == 3);
         }
 
-        private string GetDebuggerDisplay()
+        [Fact]
+        public void MustReturnTwentItens()
         {
-            return ToString();
+            FeedsResponse response = _newsController.Get(1).Result;
+            Assert.True(response.CurrentCount == 20);
         }
     }
 }

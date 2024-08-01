@@ -4,7 +4,7 @@ namespace ApiSample.Application.Model
 {
     public class FeedsResponse
     {
-        public FeedsResponse(long totalFeeds, int totalPages, int feedsPerPages, int page, IEnumerable<Feed> feeds)
+        public FeedsResponse(long totalFeeds , int totalPages, int feedsPerPages, int page, IEnumerable<Feed> feeds)
         {
             TotalFeeds = totalFeeds;
             TotalPages = totalPages;
