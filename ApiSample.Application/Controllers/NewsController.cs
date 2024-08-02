@@ -48,18 +48,18 @@ namespace ApiSample.Application.Controllers
             if (pagenumber < 1) pagenumber = 1;
 
             try
-            {   
-               IEnumerable<Feed> feeds = await GetFeedsAsync(pagenumber);
+            {
+                IEnumerable<Feed> feeds = await GetFeedsAsync(pagenumber);
 
                 _totalFeeds = feeds.Count();
 
-                int lastPage = (int)(_totalFeeds % _feedsPerPage) > 0 ? 1 : 0;
+                int lastPage = (_totalFeeds % _feedsPerPage) > 0 ? 1 : 0;
 
-                _totalPages = (int)(_totalFeeds / _feedsPerPage) + lastPage;
+                _totalPages = (_totalFeeds / _feedsPerPage) + lastPage;
 
                 int feedsToSkip = (pagenumber - 1) * _feedsPerPage;
 
-                feeds = feeds.Skip(feedsToSkip).Take(_feedsPerPage); 
+                feeds = feeds.Skip(feedsToSkip).Take(_feedsPerPage);
 
                 FeedsResponse _feedResponse = new FeedsResponse(totalFeeds: _totalFeeds, totalPages: _totalPages, feedsPerPages: _feedsPerPage, page: pagenumber, feeds: feeds);
 

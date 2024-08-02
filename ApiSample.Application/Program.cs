@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 builder.Services.AddSingleton<IMongoDBIntegrate>(sp =>
-        new MongoDBIntegrate("mongodb://root:123456@172.18.160.1:27017", "mudb"));
+        new MongoDBIntegrate("mongodb://root:123456@localhost:27017", "mudb"));
 
 builder.Services.AddScoped<IMongoDatabase>(sp =>
     sp.GetRequiredService<IMongoDBIntegrate>().GetDatabaseConnection());
