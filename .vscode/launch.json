@@ -2,6 +2,28 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "RssReaderContainer Docker Attach",
+            "type": "coreclr",
+            "request": "attach",
+            "processId": "${command:pickRemoteProcess}",
+            "pipeTransport": {
+              "pipeCwd": "${workspaceFolder}",
+              "pipeProgram": "docker",
+              "pipeArgs": [
+                "exec",
+                "-i",
+                "1fbf4d8d053b"
+              ],
+              "debuggerPath": "/remote_debugger/vsdbg",
+              "pipeEnv": {
+                "TERM": "xterm"
+              }
+            },
+            "sourceFileMap": {
+              "/src": "${workspaceFolder}"
+            }
+          },
+        {
             "name": ".NET Core Api",
             "type": "coreclr",
             "request": "launch",
