@@ -25,10 +25,14 @@ namespace RssQueueConsumer
 
         public Worker(ILogger<Worker> logger)
         {
+            string _rabbitConnectionString = Environment.GetEnvironmentVariable("RABBITMQ_CONNECTIONSTRING") ?? "localhost";
+            string _mongoConnectionString = Environment.GetEnvironmentVariable("MONGO_CONNECTIONSTRING") ?? "mongodb://root:123456@localhost:27017";
+
             _logger = logger;
-            _queueManager = new Manager("guest", "guest", host: "localhost");
+
+            _queueManager = new Manager("guest", "guest", host: _rabbitConnectionString);
             _imageDownloader = new ImageDownloader();
-            _mongoDBIntegrate = new MongoDBIntegrate("mongodb://root:123456@localhost:27017", "mudb");
+            _mongoDBIntegrate = new MongoDBIntegrate(_mongoConnectionString, "mudb");
         }
         public override Task StartAsync(CancellationToken cancellationToken)
         {

@@ -13,6 +13,8 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+    networks:
+      - mynetwork
 
   mongo:
     image: mongo
@@ -24,7 +26,9 @@ services:
       - "27017:27017"
     depends_on:
       my-rabbit:
-        condition: service_healthy  
+        condition: service_healthy
+    networks:
+      - mynetwork
 
   rssreadercontainer:
     image: rssreadercontainer
@@ -34,6 +38,10 @@ services:
     depends_on:
       my-rabbit:
         condition: service_healthy
+    environment:
+      - RABBITMQ_CONNECTIONSTRING=my-rabbit  
+    networks:
+      - mynetwork
 
   rssqueueconsumer:
     image: rssqueueconsumer
@@ -43,3 +51,12 @@ services:
     depends_on:
       my-rabbit:
         condition: service_healthy
+    environment:
+      - RABBITMQ_CONNECTIONSTRING=my-rabbit
+      - MONGO_CONNECTIONSTRING=mongodb://root:123456@mongo:27017
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
