@@ -3,12 +3,14 @@ using ApiSample.Application;
 using ApiSample.Domain;
 using MongoDB.Driver;
 
+string _mongoConnectionString = Environment.GetEnvironmentVariable("MONGO_CONNECTIONSTRING") ?? "mongodb://root:123456@localhost:27017";
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
 builder.Services.AddSingleton<IMongoDBIntegrate>(sp =>
-        new MongoDBIntegrate("mongodb://root:123456@localhost:27017", "mudb"));
+        new MongoDBIntegrate(_mongoConnectionString, "mudb"));
 
 builder.Services.AddScoped<IMongoDatabase>(sp =>
     sp.GetRequiredService<IMongoDBIntegrate>().GetDatabaseConnection());

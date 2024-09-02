@@ -57,6 +57,22 @@ services:
     networks:
       - mynetwork
 
+  apisample:
+    build:
+      context: .
+      dockerfile: ApiSample.Application/Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      my-rabbit:
+        condition: service_healthy
+      mongo:
+        condition: service_started
+    environment:
+      - MONGO_CONNECTIONSTRING=mongodb://root:123456@mongo:27017
+    networks:
+      - mynetwork
+
 networks:
   mynetwork:
     driver: bridge
