@@ -5,12 +5,10 @@ using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
 
 builder.Services.AddSingleton<IMongoDBIntegrate>(sp =>
-        new MongoDBIntegrate("mongodb://root:123456@localhost1:27017", "mudb"));
+        new MongoDBIntegrate("mongodb://root:123456@localhost:27017", "mudb"));
 
 builder.Services.AddScoped<IMongoDatabase>(sp =>
     sp.GetRequiredService<IMongoDBIntegrate>().GetDatabaseConnection());
