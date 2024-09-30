@@ -13,7 +13,7 @@ COPY ["RssQueueConsumer/RssQueueConsumer.csproj", "RssQueueConsumer/"]
 COPY ["ApiSample.Domain/ApiSample.Domain.csproj", "ApiSample.Domain/"]
 COPY ["ApiSample.Infraestrutura/ApiSample.Infraestrutura.csproj", "ApiSample.Infraestrutura/"]
 RUN dotnet restore "./RssQueueConsumer/RssQueueConsumer.csproj"
-COPY ["RabbitMQManager/RabbitMQManager.csproj", "RabbitMQManager/"]
+#COPY ["RabbitMQManager/RabbitMQManager.csproj", "RabbitMQManager/"]
 COPY . .
 WORKDIR "/src/RssQueueConsumer"
 RUN dotnet build "./RssQueueConsumer.csproj" -c $BUILD_CONFIGURATION -o /app/build
