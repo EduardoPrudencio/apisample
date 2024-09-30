@@ -37,3 +37,12 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
+    - name: Build and push
+      uses: docker/build-push-action@v6
+      with:
+        context: ./RssQueueConsumer
+        file: ./RssQueueConsumer/Dockerfile
+        push: true
+        tags: |
+          dududeveloper/RssConsumer/v${{gitrub.run_number}}
+          dududeveloper/RssConsumer/latest
