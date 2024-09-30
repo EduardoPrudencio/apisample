@@ -2,14 +2,18 @@
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 
-# Copy the entire project directory
-COPY . . 
-
-# Restore dependencies
+# Copy the project file and restore dependencies
+COPY ["RssQueueConsumer.csproj", "."]
 RUN dotnet restore "RssQueueConsumer.csproj"
 
-# Build the project
-RUN dotnet build "RssQueueConsumer.csproj" -c Release -o /app/build
+# Copy the rest of the application code
+COPY . .
+
+# Create the build output directory
+RUN mkdir -p /app/build
+
+# Build the project with verbose logging for diagnostics
+RUN dotnet build "RssQueueConsumer.csproj" -c Release -o /app/build -v diag
 
 # Stage 2: Publish
 FROM build AS publish
