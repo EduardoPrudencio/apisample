@@ -12,7 +12,6 @@ WORKDIR /src
 COPY ["RssQueueConsumer/RssQueueConsumer.csproj", "RssQueueConsumer/"]
 COPY ["ApiSample.Domain/ApiSample.Domain.csproj", "ApiSample.Domain/"]
 COPY ["ApiSample.Infraestrutura/ApiSample.Infraestrutura.csproj", "ApiSample.Infraestrutura/"]
-COPY ["RabbitMQManager/Manager.cs", "RabbitMQManager/"]
 RUN dotnet restore "./RssQueueConsumer/RssQueueConsumer.csproj"
 COPY . .
 WORKDIR "/src/RssQueueConsumer"
