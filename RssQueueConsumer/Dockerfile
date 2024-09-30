@@ -7,7 +7,7 @@ COPY ["RssQueueConsumer/RssQueueConsumer.csproj", "RssQueueConsumer/"]
 RUN dotnet restore "RssQueueConsumer/RssQueueConsumer.csproj"
 
 # Copy the remaining files and build the project
-COPY ./RssQueueConsumer ./RssQueueConsumer
+COPY ../RssQueueConsumer ./RssQueueConsumer
 WORKDIR "/src/RssQueueConsumer"
 RUN dotnet build -c Release -o /app/build
 
