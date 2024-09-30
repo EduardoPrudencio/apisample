@@ -9,10 +9,10 @@ COPY ["RssQueueConsumer.csproj", "RssQueueConsumer/"]
 RUN dotnet restore "RssQueueConsumer/RssQueueConsumer.csproj"
 COPY . .
 WORKDIR "/src/RssQueueConsumer"
-RUN dotnet build "RssQueueConsumer/RssQueueConsumer.csproj" -c Release -o /app/build
+RUN dotnet build "RssQueueConsumer.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "RssQueueConsumer/RssQueueConsumer.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "RssQueueConsumer.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
