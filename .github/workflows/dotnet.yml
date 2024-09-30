@@ -44,5 +44,5 @@ jobs:
         file: ./RssQueueConsumer/Dockerfile
         push: true
         tags: | 
-          dududeveloper/RssConsumer/v${{github.run_number}}
-          dududeveloper/RssConsumer/latest
+          dududeveloper/rss-consumer/v${{github.run_number}}
+          dududeveloper/rss-consumer/latest
