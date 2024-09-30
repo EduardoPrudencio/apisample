@@ -17,11 +17,12 @@ RUN dotnet restore "./RssQueueConsumer/RssQueueConsumer.csproj"
 COPY . .
 WORKDIR "/src/RssQueueConsumer"
 RUN dotnet build "./RssQueueConsumer.csproj" -c $BUILD_CONFIGURATION -o /app/build
+COPY ["RabbitMQManager/RabbitMQManager.csproj", "RabbitMQManager/"]
 
 # Esta fase é usada para publicar o projeto de serviço a ser copiado para a fase final
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./RssQueueConsumer.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./Manager.cs" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # Esta fase é usada na produção ou quando executada no VS no modo normal (padrão quando não está usando a configuração de Depuração)
 FROM base AS final
