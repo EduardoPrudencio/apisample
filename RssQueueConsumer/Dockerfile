@@ -1,26 +1,30 @@
-# Stage 1: Build
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
-WORKDIR /src
+# Acesse https://aka.ms/customizecontainer para saber como personalizar seu contêiner de depuração e como o Visual Studio usa este Dockerfile para criar suas imagens para uma depuração mais rápida.
 
-# Copy the project file and restore dependencies
-COPY ["RssQueueConsumer.csproj", "."]
-RUN dotnet restore "RssQueueConsumer.csproj"
-
-# Copy the rest of the application code
-COPY . .
-
-# Create the build output directory
-RUN mkdir -p /app/build
-
-# Build the project with verbose logging for diagnostics
-RUN dotnet build "RssQueueConsumer.csproj" -c Release -o /app/build -v diag
-
-# Stage 2: Publish
-FROM build AS publish
-RUN dotnet publish "RssQueueConsumer.csproj" -c Release -o /app/publish /p:UseAppHost=false
-
-# Stage 3: Runtime
+# Esta fase é usada durante a execução no VS no modo rápido (Padrão para a configuração de Depuração)
 FROM mcr.microsoft.com/dotnet/runtime:7.0 AS base
+WORKDIR /app
+
+
+# Esta fase é usada para compilar o projeto de serviço
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+COPY ["RssQueueConsumer/RssQueueConsumer.csproj", "RssQueueConsumer/"]
+COPY ["ApiSample.Domain/ApiSample.Domain.csproj", "ApiSample.Domain/"]
+COPY ["ApiSample.Infraestrutura/ApiSample.Infraestrutura.csproj", "ApiSample.Infraestrutura/"]
+COPY ["RabbitMQManager/RabbitMQManager.csproj", "RabbitMQManager/"]
+RUN dotnet restore "./RssQueueConsumer/RssQueueConsumer.csproj"
+COPY . .
+WORKDIR "/src/RssQueueConsumer"
+RUN dotnet build "./RssQueueConsumer.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+# Esta fase é usada para publicar o projeto de serviço a ser copiado para a fase final
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./RssQueueConsumer.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+# Esta fase é usada na produção ou quando executada no VS no modo normal (padrão quando não está usando a configuração de Depuração)
+FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "RssQueueConsumer.dll"]
