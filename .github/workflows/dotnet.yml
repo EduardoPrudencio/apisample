@@ -43,6 +43,4 @@ jobs:
         context: ./RssQueueConsumer
         file: ./RssQueueConsumer/Dockerfile
         push: true
-        tags: |
-          dududeveloper/RssConsumer/v${{gitrub.run_number}}
-          dududeveloper/RssConsumer/latest
+        tags: dududeveloper/RssConsumer/v${{gitrub.run_number}}
