@@ -10,7 +10,7 @@ FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["RssReaderContainer.csproj", "RssReaderContainer/"]
-RUN dotnet restore "./RssReaderContainer/RssReaderContainer.csproj"
+RUN dotnet restore "RssReaderContainer/RssReaderContainer.csproj"
 COPY . .
 WORKDIR "/src/RssReaderContainer"
 RUN dotnet build "RssReaderContainer.csproj" -c Release -o /app/build
