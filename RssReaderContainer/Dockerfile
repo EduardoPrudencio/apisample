@@ -3,7 +3,6 @@ FROM mcr.microsoft.com/dotnet/runtime:7.0 AS base
 WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
-ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["RssReaderContainer/RssReaderContainer.csproj", "RssReaderContainer/"]
 COPY ["ApiSample.Domain/ApiSample.Domain.csproj", "ApiSample.Domain/"]
@@ -12,7 +11,7 @@ COPY ["RabbitMQManager/RabbitMQManager.csproj", "RabbitMQManager/"]
 RUN dotnet restore "./RssReaderContainer/RssReaderContainer.csproj"
 COPY . .
 WORKDIR "/src/RssReaderContainer"
-RUN dotnet build "./RssReaderContainer.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "RssReaderContainer.csproj" -c Release -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release

@@ -41,9 +41,9 @@ jobs:
     - name: Build and push
       uses: docker/build-push-action@v6
       with:
-        context: ./RssQueueConsumer
-        file: ./RssQueueConsumer/Dockerfile
+        context: .
+        file: ./RssReaderContainer/Dockerfile
         push: true
         tags: | 
-          dududeveloper/rss-consumer/v${{github.run_number}}
-          dududeveloper/rss-consumer/latest
+          dududeveloper/rss-reader-container/v${{github.run_number}}
+          dududeveloper/rss-reader-container/latest
