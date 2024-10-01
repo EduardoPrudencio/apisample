@@ -13,7 +13,7 @@ COPY ["RssReaderContainer.csproj", "RssReaderContainer/"]
 RUN dotnet restore "./RssReaderContainer/RssReaderContainer.csproj"
 COPY . .
 WORKDIR "/src/RssReaderContainer"
-RUN dotnet build "./RssReaderContainer/RssReaderContainer.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "RssReaderContainer.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # Esta fase é usada para publicar o projeto de serviço a ser copiado para a fase final
 FROM build AS publish
