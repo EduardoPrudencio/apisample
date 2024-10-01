@@ -7,7 +7,6 @@ WORKDIR /app
 
 # Esta fase é usada para compilar o projeto de serviço
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
-ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["RssReaderContainer/RssReaderContainer.csproj", "RssReaderContainer/"]
 RUN dotnet restore "RssReaderContainer/RssReaderContainer.csproj"
