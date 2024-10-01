@@ -44,4 +44,4 @@ jobs:
         context: .
         file: ./RssReaderContainer/Dockerfile
         push: true
-        tags: dududeveloper/rss-reader-container/latest
+        tags: dududeveloper/rss-reader-container:latest
