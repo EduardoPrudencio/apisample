@@ -52,7 +52,7 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         context: .
-        file: ./RssQueConsumer/Dockerfile
+        file: ./RssQueueConsumer/Dockerfile
         push: true
         tags: | 
           dududeveloper/rss-queue-consumer:latest
