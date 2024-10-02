@@ -38,7 +38,7 @@ jobs:
       with:
         username: ${{secrets.DOCKERHUB_USERNAME}}
         password: ${{secrets.DOCKERHUB_PASSWORD}}
-    - name: Build and push
+    - name: Build and push Rss Reader
       uses: docker/build-push-action@v6
       with:
         context: .
@@ -47,3 +47,13 @@ jobs:
         tags: | 
           dududeveloper/rss-reader-container:latest
           dududeveloper/rss-reader-container:v${{github.run_number}}
+
+    - name: Build and push Rss Consumer
+      uses: docker/build-push-action@v6
+      with:
+        context: .
+        file: ./RssQueConsumer/Dockerfile
+        push: true
+        tags: | 
+          dududeveloper/rss-queue-consumer:latest
+          dududeveloper/rss-queue-consumer:v${{github.run_number}}
