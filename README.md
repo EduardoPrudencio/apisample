@@ -32,7 +32,7 @@ A ideia deste projeto é ter um worker que varre uma lista de endereços de RSS,
 * Worker Service
 * Docker
 * RabbitMQ
-* Keycloak
+* ReacJS
 
 # Comandos dotnet
 
