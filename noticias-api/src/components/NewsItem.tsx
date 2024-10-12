@@ -13,9 +13,9 @@ const NewsItem: React.FC<NewsItemProps> = ({ news }) => {
       <p><strong>Autor:</strong> {news.author || "Desconhecido"}</p>
       <p><strong>Data de Publicação:</strong> {new Date(news.publishDate).toLocaleString()}</p>
       <a href={news.link} target="_blank" rel="noopener noreferrer">
-        <img src={news.image} alt={news.title} style={{ maxWidth: '300px' }} />
+        <img src={news.image} alt={news.title} style={{ maxWidth: '400px' }} />
       </a>
-      <div dangerouslySetInnerHTML={{ __html: news.content }}></div>
+      <p dangerouslySetInnerHTML={{ __html: news.content }}></p>
     </div>
   );
 };
