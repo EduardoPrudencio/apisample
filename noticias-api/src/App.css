@@ -10,22 +10,31 @@
 .news-list-container {
   width: 80%;
   max-width: 1000px;
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .news-list {
   max-height: 500px; /* Altura máxima para o contêiner de notícias */
   overflow-y: auto;  /* Adiciona o scroll vertical */
+  padding: 20px;
+  border-radius: 8px;
   margin-bottom: 20px;
   padding-right: 10px; /* Ajuste para evitar o conteúdo encostar no scroll */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: white;
 }
 
 .news-item {
   border-bottom: 1px solid #ddd;
   padding: 10px;
+  color: #a5a4a4;
+}
+
+.news-item a{
+  align-self: center;
+}
+
+.news-item p{
+  font-size: 15px;
 }
 
 .news-item:last-child {

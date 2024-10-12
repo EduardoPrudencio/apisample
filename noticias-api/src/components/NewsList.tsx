@@ -15,7 +15,7 @@ const NewsList: React.FC = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get<ApiResponse>(`http://127.0.0.1:5000/api/news/pagenumber/${page}`);
+      const response = await axios.get<ApiResponse>(`http://127.0.0.1:8080/api/news/pagenumber/${page}`);
       
       setNewsList(response.data.feeds);
       setTotalPages(response.data.totalPages);
