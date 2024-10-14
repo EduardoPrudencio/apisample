@@ -58,7 +58,7 @@ namespace RssReaderContainer
                     }
 
                     _logger.LogInformation("A ista possui: {time} itens.", _list.Count());
-                    await Task.Delay(5000, stoppingToken);
+                    await Task.Delay(43200, stoppingToken);
                 }
                 catch (Exception exp)
                 {

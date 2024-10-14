@@ -59,7 +59,10 @@ namespace ApiSample.Application.Controllers
 
                 int feedsToSkip = (pagenumber - 1) * _feedsPerPage;
 
-                feeds = feeds.Skip(feedsToSkip).Take(_feedsPerPage);
+                feeds = feeds
+                    .OrderByDescending(feed => feed.PublishDate)
+                    .Skip(feedsToSkip)
+                    .Take(_feedsPerPage);
 
                 FeedsResponse _feedResponse = new FeedsResponse(totalFeeds: _totalFeeds, totalPages: _totalPages, feedsPerPages: _feedsPerPage, page: pagenumber, feeds: feeds);
 
