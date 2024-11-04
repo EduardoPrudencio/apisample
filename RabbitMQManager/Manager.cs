@@ -94,7 +94,24 @@ namespace RabbitMQManager;
             }
         }
 
-        public EventingBasicConsumer CreateConsumer(IModel model)
+        public int GetQueueMessageCount(string queueName)
+        {
+            using (model = connection.CreateModel())
+            {
+                var queueInfo = model.QueueDeclarePassive(queueName);
+                return (int)queueInfo.MessageCount;
+            }
+        }
+
+        public void PurgeQueue(string queueName)
+        {
+            using (model = connection.CreateModel())
+            {
+                model.QueuePurge(queueName);
+            }
+        }
+
+    public EventingBasicConsumer CreateConsumer(IModel model)
         {
             return new EventingBasicConsumer(model);
         }

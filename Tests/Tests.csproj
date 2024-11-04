@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ApiSample.Application\ApiSample.Application.csproj" />
+    <ProjectReference Include="..\RabbitMQManager\RabbitMQManager.csproj" />
   </ItemGroup>
 
 </Project>
